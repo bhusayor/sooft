@@ -159,153 +159,371 @@
 
   /* ─── HERO ─── */
   .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding-top: 72px;
-  }
-
-  .hero-left {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 640px;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 80px 64px 80px 80px;
-    position: relative;
+    justify-content: flex-end;
+    background: #080705;
   }
 
-  .hero-eyebrow {
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 28px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  /* Background image */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
-  .hero-eyebrow::before {
+  .hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    filter: saturate(0.6) brightness(0.55);
+    transform: scale(1.06);
+    animation: heroDrift 18s ease-in-out infinite alternate;
+  }
+  @keyframes heroDrift {
+    from { transform: scale(1.06) translateX(0px); }
+    to   { transform: scale(1.10) translateX(-18px); }
+  }
+
+  /* Gradient overlays */
+  .hero-bg::after {
     content: '';
-    display: block;
-    width: 32px;
-    height: 1px;
-    background: var(--accent);
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom,
+        rgba(8,7,5,0.35) 0%,
+        rgba(8,7,5,0.0) 35%,
+        rgba(8,7,5,0.0) 55%,
+        rgba(8,7,5,0.92) 100%
+      ),
+      linear-gradient(to right,
+        rgba(8,7,5,0.45) 0%,
+        transparent 60%
+      );
+  }
+
+  /* ── HERO CONTENT ── */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 72px 0 72px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Big editorial title — runs full width, clips into image */
+  .hero-title-wrap {
+    position: relative;
+    overflow: hidden;
   }
 
   .hero-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(52px, 6vw, 88px);
-    font-weight: 300;
-    line-height: 1.04;
-    letter-spacing: -0.01em;
-    color: var(--text);
-    margin-bottom: 32px;
+    font-size: clamp(96px, 13.5vw, 220px);
+    font-weight: 600;
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0;
+    /* clip-path animation on load */
+    clip-path: inset(0 0 0 0);
+    animation: heroTitleIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
   }
-  .hero-title em {
-    font-style: italic;
-    color: var(--accent);
-    font-weight: 300;
+  @keyframes heroTitleIn {
+    from { opacity: 0; transform: translateY(60px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
+  .hero-title .line { display: block; overflow: hidden; }
+  .hero-title .line-inner {
+    display: block;
+    animation: lineSlideIn 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-title .line:nth-child(1) .line-inner { animation-delay: 0.4s; }
+  .hero-title .line:nth-child(2) .line-inner { animation-delay: 0.56s; }
+  .hero-title .line:nth-child(3) .line-inner { animation-delay: 0.72s; }
+
+  @keyframes lineSlideIn {
+    from { transform: translateY(110%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .hero-title .gold { color: var(--accent); }
+  .hero-title .outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.55);
+  }
+
+  /* Row below title: description + CTA */
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 36px 0 0 0;
+    margin-bottom: 40px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-desc-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 380px;
+  }
+  .hero-eyebrow {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
   .hero-desc {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300;
     line-height: 1.75;
-    color: var(--text2);
-    max-width: 420px;
-    margin-bottom: 48px;
+    color: rgba(255,255,255,0.55);
+    margin: 0;
   }
 
   .hero-actions {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 16px;
+    flex-shrink: 0;
   }
-
   .hero-primary {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--bg);
-    background: var(--text);
+    color: #080705;
+    background: #fff;
     padding: 14px 32px;
     border: none;
     cursor: pointer;
     text-decoration: none;
-    transition: background 0.2s, transform 0.2s;
-    border-radius: 2px;
+    transition: background 0.25s, color 0.25s, transform 0.2s;
+    border-radius: 1px;
   }
-  .hero-primary:hover { background: var(--accent); transform: translateY(-1px); }
+  .hero-primary:hover { background: var(--accent); transform: translateY(-2px); }
 
   .hero-secondary {
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text2);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 0.2s, gap 0.2s;
-  }
-  .hero-secondary:hover { color: var(--text); gap: 12px; }
-  .hero-secondary .arrow { font-size: 16px; }
-
-  .hero-stats {
-    display: flex;
-    gap: 40px;
-    margin-top: 64px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border);
-  }
-  .stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px;
-    font-weight: 500;
-    color: var(--text);
-    line-height: 1;
-  }
-  .stat-label {
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--text3);
-    margin-top: 4px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,0.18);
+    padding: 13px 24px;
+    transition: border-color 0.2s, color 0.2s, gap 0.2s;
   }
+  .hero-secondary:hover {
+    border-color: rgba(255,255,255,0.45);
+    color: rgba(255,255,255,0.85);
+    gap: 12px;
+  }
+  .hero-secondary .arrow { font-size: 14px; }
 
-  .hero-right {
+  /* ── SCROLLING MARQUEE ── */
+  .hero-marquee {
     position: relative;
+    z-index: 2;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 14px 0;
     overflow: hidden;
-    background: var(--bg2);
+    background: rgba(8,7,5,0.4);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 
-  .hero-img-grid {
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+    animation: marqueeScroll 28s linear infinite;
+    width: max-content;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 32px;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+  .marquee-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  /* ── SCROLL INDICATOR ── */
+  .hero-scroll-hint {
     position: absolute;
-    inset: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 3px;
+    bottom: 72px;
+    right: 72px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both;
+  }
+  .scroll-label {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.5; }
+    50%       { transform: scaleY(0.5); opacity: 1; }
   }
 
-  .hero-img-cell {
-    overflow: hidden;
-    position: relative;
+  /* ── FLOATING YEAR BADGE ── */
+  .hero-badge {
+    position: absolute;
+    top: 108px;
+    right: 72px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeUp 1s ease 1.2s both;
   }
-  .hero-img-cell.tall { grid-row: 1 / 3; }
+  .hero-badge-ring {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.04);
+  }
+  .hero-badge-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1;
+  }
+  .hero-badge-sub {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-top: 2px;
+  }
 
-  .hero-img-cell img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    filter: saturate(0.85);
+  /* ── STATS BAR (left side, vertical) ── */
+  .hero-stats-vert {
+    position: absolute;
+    left: 72px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    animation: fadeUp 1s ease 1.1s both;
   }
-  .hero-img-cell:hover img { transform: scale(1.04); filter: saturate(1); }
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hero-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+  .hero-stat-divider {
+    width: 20px;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin-top: 28px;
+  }
+
+  /* ── RESPONSIVE HERO ── */
+  @media (max-width: 900px) {
+    .hero-content { padding: 0 32px; }
+    .hero-title { font-size: clamp(72px, 16vw, 140px); }
+    .hero-stats-vert { display: none; }
+    .hero-badge { right: 32px; top: 96px; }
+    .hero-scroll-hint { right: 32px; bottom: 72px; }
+    .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
+  }
+  @media (max-width: 600px) {
+    .hero-content { padding: 0 20px; }
+    .hero-title { font-size: clamp(56px, 18vw, 100px); }
+    .hero-badge { display: none; }
+    .hero-scroll-hint { display: none; }
+    .hero-bottom { padding-top: 24px; margin-bottom: 28px; }
+    .hero-actions { flex-direction: column; width: 100%; }
+    .hero-primary, .hero-secondary { text-align: center; justify-content: center; width: 100%; }
+  }
 
   /* ─── SECTION SHARED ─── */
-  section { padding: 120px 80px; }
+  section:not(.hero) { padding: 120px 80px; }
 
   .section-label {
     font-size: 11px;
@@ -1094,8 +1312,7 @@
   @media (max-width: 1100px) {
     nav { padding: 0 32px; }
     .nav-links { gap: 24px; }
-    .hero-left { padding: 60px 40px 60px 48px; }
-    section { padding: 100px 48px; }
+    section:not(.hero) { padding: 100px 48px; }
     footer { padding: 48px; }
     .services-grid { grid-template-columns: 1fr 1fr; }
     .testimonials-grid { grid-template-columns: 1fr 1fr; }
@@ -1104,11 +1321,7 @@
   @media (max-width: 860px) {
     nav { padding: 0 24px; }
     .nav-links { display: none; }
-    .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-left { padding: 60px 24px; }
-    .hero-right { min-height: 60vw; }
-    .hero-img-grid { position: relative; height: 60vw; }
-    section { padding: 80px 24px; }
+    section:not(.hero) { padding: 80px 24px; }
     #about { grid-template-columns: 1fr; }
     .about-img-wrap { min-height: 60vw; }
     .about-content { padding: 60px 24px; }
@@ -1156,48 +1369,93 @@
 
 <!-- Hero -->
 <section class="hero" id="home">
-  <div class="hero-left">
-    <div class="hero-eyebrow reveal">Editorial & Fine Art Photography</div>
-    <h1 class="hero-title reveal reveal-delay-1">
-      Light<br>
-      Finds Its<br>
-      <em>Own Truth</em>
-    </h1>
-    <p class="hero-desc reveal reveal-delay-2">
-      Award-winning photographer based in New York, specializing in editorial portraiture, landscape, and documentary work that captures the quiet moments between moments.
-    </p>
-    <div class="hero-actions reveal reveal-delay-3">
-      <a href="#work" class="hero-primary">View Portfolio</a>
-      <a href="#about" class="hero-secondary">About Elias <span class="arrow">→</span></a>
+
+  <!-- Background -->
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1800&q=90" alt="Hero">
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="hero-scroll-hint">
+    <span class="scroll-label">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+
+  <!-- Year badge -->
+  <div class="hero-badge">
+    <div class="hero-badge-ring">
+      <div class="hero-badge-num">12+</div>
+      <div class="hero-badge-sub">Years</div>
     </div>
-    <div class="hero-stats reveal reveal-delay-4">
-      <div>
-        <div class="stat-num">12+</div>
-        <div class="stat-label">Years Active</div>
+  </div>
+
+  <!-- Vertical stats -->
+  <div class="hero-stats-vert">
+    <div class="hero-stat">
+      <div class="hero-stat-num">340+</div>
+      <div class="hero-stat-label">Projects</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">18</div>
+      <div class="hero-stat-label">Awards</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-label">Countries</div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="hero-content">
+    <div class="hero-title-wrap">
+      <h1 class="hero-title">
+        <span class="line"><span class="line-inner">Light</span></span>
+        <span class="line"><span class="line-inner outline">Finds</span></span>
+        <span class="line"><span class="line-inner gold">Truth.</span></span>
+      </h1>
+    </div>
+
+    <div class="hero-bottom">
+      <div class="hero-desc-block">
+        <div class="hero-eyebrow">Editorial &amp; Fine Art Photography</div>
+        <p class="hero-desc">
+          Award-winning photographer based in New York — capturing the quiet
+          space between intention and instinct, one frame at a time.
+        </p>
       </div>
-      <div>
-        <div class="stat-num">340+</div>
-        <div class="stat-label">Projects Done</div>
-      </div>
-      <div>
-        <div class="stat-num">18</div>
-        <div class="stat-label">Awards Won</div>
+      <div class="hero-actions">
+        <a href="#work" class="hero-primary">View Portfolio</a>
+        <a href="#about" class="hero-secondary">About Elias <span class="arrow">→</span></a>
       </div>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="hero-img-grid">
-      <div class="hero-img-cell tall">
-        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80" alt="Portrait">
-      </div>
-      <div class="hero-img-cell">
-        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Landscape">
-      </div>
-      <div class="hero-img-cell">
-        <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=400&q=80" alt="Street">
-      </div>
+
+  <!-- Marquee ticker -->
+  <div class="hero-marquee">
+    <div class="marquee-track">
+      <!-- first half -->
+      <span class="marquee-item">Editorial Portrait <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Fine Art Landscape <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Campaign Campaigns <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Documentary Work <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Fashion &amp; Glamour <span class="marquee-dot"></span></span>
+      <span class="marquee-item">New York — Since 2012 <span class="marquee-dot"></span></span>
+      <span class="marquee-item">CoverGirl · Vogue · NatGeo <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Available for Commissions <span class="marquee-dot"></span></span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee-item">Editorial Portrait <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Fine Art Landscape <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Campaign Campaigns <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Documentary Work <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Fashion &amp; Glamour <span class="marquee-dot"></span></span>
+      <span class="marquee-item">New York — Since 2012 <span class="marquee-dot"></span></span>
+      <span class="marquee-item">CoverGirl · Vogue · NatGeo <span class="marquee-dot"></span></span>
+      <span class="marquee-item">Available for Commissions <span class="marquee-dot"></span></span>
     </div>
   </div>
+
 </section>
 
 <!-- Work / Portfolio -->
