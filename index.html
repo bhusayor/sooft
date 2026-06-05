@@ -345,91 +345,239 @@
     max-width: 520px;
   }
 
-  /* ─── GALLERY ─── */
+  /* ─── PORTFOLIO / CAMPAIGNS ─── */
   #work { background: var(--bg); }
 
-  .gallery-header {
+  .portfolio-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 60px;
   }
 
-  .gallery-filters {
-    display: flex;
-    gap: 4px;
-    align-items: center;
+  /* ── VIEW LAYERS ── */
+  .portfolio-view { display: none; }
+  .portfolio-view.active { display: block; }
+
+  /* ── CAMPAIGN INDEX GRID ── */
+  .campaigns-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
   }
 
-  .filter-btn {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    color: var(--text2);
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 8px 18px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-radius: 1px;
-  }
-  .filter-btn:hover { border-color: var(--accent); color: var(--text); }
-  .filter-btn.active {
-    background: var(--text);
-    color: var(--bg);
-    border-color: var(--text);
-  }
-
-  .gallery-grid {
-    columns: 3;
-    column-gap: 16px;
-    transition: opacity 0.3s;
-  }
-
-  .gallery-item {
-    break-inside: avoid;
-    margin-bottom: 16px;
+  .campaign-card {
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    border-radius: 2px;
+    aspect-ratio: 3/4;
+    background: var(--bg2);
   }
-  .gallery-item.hidden { display: none; }
 
-  .gallery-item img {
+  .campaign-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                filter 0.5s;
+    filter: saturate(0.75) brightness(0.92);
+  }
+  .campaign-card:hover img {
+    transform: scale(1.06);
+    filter: saturate(1) brightness(1);
+  }
+
+  .campaign-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0) 55%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px 24px;
+    transition: background 0.4s;
+  }
+  .campaign-card:hover .campaign-card-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.1) 65%);
+  }
+
+  .campaign-card-cat {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .campaign-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .campaign-card-count {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(4px);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .campaign-card:hover .campaign-card-count {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .campaign-card-count::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* ── CAMPAIGN DETAIL VIEW ── */
+  .campaign-detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    cursor: pointer;
+    margin-bottom: 48px;
+    transition: color 0.2s, gap 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .campaign-detail-back:hover { color: var(--text); gap: 14px; }
+  .campaign-detail-back .back-arrow { font-size: 16px; transition: transform 0.2s; }
+  .campaign-detail-back:hover .back-arrow { transform: translateX(-3px); }
+
+  .campaign-detail-header {
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .campaign-detail-cat {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .campaign-detail-cat::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .campaign-detail-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+  }
+  .campaign-detail-title em { font-style: italic; color: var(--accent); }
+
+  .campaign-detail-meta {
+    font-size: 13px;
+    color: var(--text3);
+    text-align: right;
+  }
+  .campaign-detail-meta span {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--text2);
+    font-style: italic;
+  }
+
+  /* ── CAMPAIGN PHOTO MASONRY ── */
+  .campaign-photos {
+    columns: 3;
+    column-gap: 4px;
+  }
+
+  .campaign-photo-item {
+    break-inside: avoid;
+    margin-bottom: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .campaign-photo-item img {
     display: block;
     width: 100%;
     height: auto;
     transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s;
-    filter: saturate(0.8);
+    filter: saturate(0.82);
   }
-  .gallery-item:hover img { transform: scale(1.06); filter: saturate(1); }
+  .campaign-photo-item:hover img {
+    transform: scale(1.04);
+    filter: saturate(1);
+  }
 
-  .gallery-overlay {
+  .campaign-photo-item .photo-zoom {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.4s;
+    background: rgba(0,0,0,0);
     display: flex;
-    align-items: flex-end;
-    padding: 24px;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s, background 0.3s;
   }
-  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .campaign-photo-item:hover .photo-zoom {
+    opacity: 1;
+    background: rgba(0,0,0,0.18);
+  }
+  .photo-zoom-icon {
+    width: 40px; height: 40px;
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    transform: scale(0.8);
+    transition: transform 0.3s;
+  }
+  .campaign-photo-item:hover .photo-zoom-icon { transform: scale(1); }
 
-  .gallery-meta { color: white; }
-  .gallery-meta-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    font-weight: 400;
-    margin-bottom: 4px;
+  @media (max-width: 1100px) {
+    .campaigns-grid { grid-template-columns: repeat(2, 1fr); }
+    .campaign-photos { columns: 2; }
   }
-  .gallery-meta-cat {
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.65);
+  @media (max-width: 600px) {
+    .campaigns-grid { grid-template-columns: 1fr; }
+    .campaign-photos { columns: 2; }
+    .campaign-detail-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .campaign-detail-meta { text-align: left; }
   }
 
   /* ─── ABOUT ─── */
@@ -850,10 +998,40 @@
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.45);
     font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
+    font-size: 15px;
     font-style: italic;
+    white-space: nowrap;
+  }
+
+  .lightbox-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+    z-index: 10;
+  }
+  .lightbox-arrow:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.5);
+    color: white;
+  }
+  #lb-prev { left: 28px; }
+  #lb-next { right: 28px; }
+  @media (max-width: 600px) {
+    #lb-prev { left: 10px; }
+    #lb-next { right: 10px; }
   }
 
   /* ─── PAGE LOADER ─── */
@@ -919,7 +1097,6 @@
     .hero-left { padding: 60px 40px 60px 48px; }
     section { padding: 100px 48px; }
     footer { padding: 48px; }
-    .gallery-grid { columns: 2; }
     .services-grid { grid-template-columns: 1fr 1fr; }
     .testimonials-grid { grid-template-columns: 1fr 1fr; }
   }
@@ -935,13 +1112,12 @@
     #about { grid-template-columns: 1fr; }
     .about-img-wrap { min-height: 60vw; }
     .about-content { padding: 60px 24px; }
-    .gallery-grid { columns: 2; }
     .services-grid { grid-template-columns: 1fr; }
     .testimonials-grid { grid-template-columns: 1fr; }
     .contact-inner { grid-template-columns: 1fr; gap: 48px; }
     footer { flex-direction: column; gap: 20px; text-align: center; padding: 40px 24px; }
     .services-header { grid-template-columns: 1fr; gap: 20px; }
-    .gallery-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .portfolio-header { flex-direction: column; align-items: flex-start; gap: 20px; }
     .form-row { grid-template-columns: 1fr; }
   }
 </style>
@@ -957,7 +1133,9 @@
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  <button class="lightbox-arrow" id="lb-prev" onclick="lightboxNav(-1)">&#8592;</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="" style="transition: opacity 0.18s ease, transform 0.18s ease;">
+  <button class="lightbox-arrow" id="lb-next" onclick="lightboxNav(1)">&#8594;</button>
   <div class="lightbox-caption" id="lightbox-caption"></div>
 </div>
 
@@ -1022,60 +1200,94 @@
   </div>
 </section>
 
-<!-- Work / Gallery -->
+<!-- Work / Portfolio -->
 <section id="work">
-  <div class="gallery-header reveal">
-    <div>
-      <div class="section-label">Portfolio</div>
-      <h2 class="section-title">Selected <em>Works</em></h2>
+
+  <!-- ── VIEW 1: Campaign Index ── -->
+  <div class="portfolio-view active" id="view-index">
+    <div class="portfolio-header reveal">
+      <div>
+        <div class="section-label">Portfolio</div>
+        <h2 class="section-title">Selected <em>Campaigns</em></h2>
+      </div>
     </div>
-    <div class="gallery-filters">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="portrait">Portrait</button>
-      <button class="filter-btn" data-filter="landscape">Landscape</button>
-      <button class="filter-btn" data-filter="editorial">Editorial</button>
-      <button class="filter-btn" data-filter="street">Street</button>
+    <div class="campaigns-grid" id="campaigns-grid">
+
+      <div class="campaign-card reveal" onclick="openCampaign('covergirl')">
+        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80" alt="CoverGirl">
+        <div class="campaign-card-overlay">
+          <div class="campaign-card-cat">Editorial</div>
+          <div class="campaign-card-title">CoverGirl</div>
+          <div class="campaign-card-count">9 images</div>
+        </div>
+      </div>
+
+      <div class="campaign-card reveal reveal-delay-1" onclick="openCampaign('golden-hour')">
+        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80" alt="Golden Hour">
+        <div class="campaign-card-overlay">
+          <div class="campaign-card-cat">Portrait</div>
+          <div class="campaign-card-title">Golden Hour</div>
+          <div class="campaign-card-count">8 images</div>
+        </div>
+      </div>
+
+      <div class="campaign-card reveal reveal-delay-2" onclick="openCampaign('mountain-mist')">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Mountain Mist">
+        <div class="campaign-card-overlay">
+          <div class="campaign-card-cat">Landscape</div>
+          <div class="campaign-card-title">Mountain Mist</div>
+          <div class="campaign-card-count">7 images</div>
+        </div>
+      </div>
+
+      <div class="campaign-card reveal reveal-delay-1" onclick="openCampaign('high-fashion')">
+        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80" alt="High Fashion">
+        <div class="campaign-card-overlay">
+          <div class="campaign-card-cat">Fashion</div>
+          <div class="campaign-card-title">High Fashion</div>
+          <div class="campaign-card-count">10 images</div>
+        </div>
+      </div>
+
+      <div class="campaign-card reveal reveal-delay-2" onclick="openCampaign('urban-pulse')">
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80" alt="Urban Pulse">
+        <div class="campaign-card-overlay">
+          <div class="campaign-card-cat">Street</div>
+          <div class="campaign-card-title">Urban Pulse</div>
+          <div class="campaign-card-count">8 images</div>
+        </div>
+      </div>
+
+      <div class="campaign-card reveal reveal-delay-3" onclick="openCampaign('ocean-breath')">
+        <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80" alt="Ocean Breath">
+        <div class="campaign-card-overlay">
+          <div class="campaign-card-cat">Landscape</div>
+          <div class="campaign-card-title">Ocean Breath</div>
+          <div class="campaign-card-count">6 images</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="gallery-grid" id="gallery">
-    <div class="gallery-item reveal" data-cat="portrait" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80" alt="Solitude" data-title="Solitude" data-cat="Portrait">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">Solitude</div><div class="gallery-meta-cat">Portrait</div></div></div>
+  <!-- ── VIEW 2: Campaign Detail ── -->
+  <div class="portfolio-view" id="view-detail">
+    <button class="campaign-detail-back" onclick="closeCampaign()">
+      <span class="back-arrow">←</span> All Campaigns
+    </button>
+    <div class="campaign-detail-header">
+      <div>
+        <div class="campaign-detail-cat" id="detail-cat">Editorial</div>
+        <h2 class="campaign-detail-title" id="detail-title">CoverGirl</h2>
+      </div>
+      <div class="campaign-detail-meta">
+        <span id="detail-year">2024</span>
+        <span id="detail-count">9 photographs</span>
+      </div>
     </div>
-    <div class="gallery-item reveal reveal-delay-1" data-cat="landscape" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Mountain Mist" data-title="Mountain Mist" data-cat="Landscape">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">Mountain Mist</div><div class="gallery-meta-cat">Landscape</div></div></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-2" data-cat="editorial" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80" alt="Editorial — Autumn" data-title="Editorial — Autumn" data-cat="Editorial">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">Editorial — Autumn</div><div class="gallery-meta-cat">Editorial</div></div></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-1" data-cat="street" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&q=80" alt="Urban Pulse" data-title="Urban Pulse" data-cat="Street">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">Urban Pulse</div><div class="gallery-meta-cat">Street</div></div></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-2" data-cat="portrait" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80" alt="Golden Hour" data-title="Golden Hour" data-cat="Portrait">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">Golden Hour</div><div class="gallery-meta-cat">Portrait</div></div></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-3" data-cat="landscape" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80" alt="Ocean Breath" data-title="Ocean Breath" data-cat="Landscape">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">Ocean Breath</div><div class="gallery-meta-cat">Landscape</div></div></div>
-    </div>
-    <div class="gallery-item reveal" data-cat="editorial" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" alt="High Fashion" data-title="High Fashion" data-cat="Editorial">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">High Fashion</div><div class="gallery-meta-cat">Editorial</div></div></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-1" data-cat="street" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&q=80" alt="Rainy Evening" data-title="Rainy Evening" data-cat="Street">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">Rainy Evening</div><div class="gallery-meta-cat">Street</div></div></div>
-    </div>
-    <div class="gallery-item reveal reveal-delay-2" data-cat="portrait" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80" alt="Natural Light" data-title="Natural Light" data-cat="Portrait">
-      <div class="gallery-overlay"><div class="gallery-meta"><div class="gallery-meta-title">Natural Light</div><div class="gallery-meta-cat">Portrait</div></div></div>
-    </div>
+    <div class="campaign-photos" id="campaign-photos"></div>
   </div>
+
 </section>
 
 <!-- About -->
@@ -1287,56 +1499,143 @@
 </footer>
 
 <script>
-  // ─── LOADER
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      document.getElementById('loader').classList.add('done');
-    }, 1600);
-  });
+  // ═══════════════════════════════════════════════
+  // CAMPAIGN DATA
+  // Each campaign: id, title, category, year, photos[]
+  // ═══════════════════════════════════════════════
+  const CAMPAIGNS = {
+    'covergirl': {
+      title: 'CoverGirl',
+      category: 'Editorial',
+      year: '2024',
+      photos: [
+        { src: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=85', title: 'CoverGirl 01' },
+        { src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=85', title: 'CoverGirl 02' },
+        { src: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&q=85', title: 'CoverGirl 03' },
+        { src: 'https://images.unsplash.com/photo-1488716820095-cbe80883c496?w=900&q=85', title: 'CoverGirl 04' },
+        { src: 'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=900&q=85', title: 'CoverGirl 05' },
+        { src: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=900&q=85', title: 'CoverGirl 06' },
+        { src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=85', title: 'CoverGirl 07' },
+        { src: 'https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=900&q=85', title: 'CoverGirl 08' },
+        { src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=900&q=85', title: 'CoverGirl 09' },
+      ]
+    },
+    'golden-hour': {
+      title: 'Golden Hour',
+      category: 'Portrait',
+      year: '2024',
+      photos: [
+        { src: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=900&q=85', title: 'Golden Hour 01' },
+        { src: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=900&q=85', title: 'Golden Hour 02' },
+        { src: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=85', title: 'Golden Hour 03' },
+        { src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900&q=85', title: 'Golden Hour 04' },
+        { src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&q=85', title: 'Golden Hour 05' },
+        { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&q=85', title: 'Golden Hour 06' },
+        { src: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=900&q=85', title: 'Golden Hour 07' },
+        { src: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=900&q=85', title: 'Golden Hour 08' },
+      ]
+    },
+    'mountain-mist': {
+      title: 'Mountain Mist',
+      category: 'Landscape',
+      year: '2023',
+      photos: [
+        { src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=85', title: 'Mountain Mist 01' },
+        { src: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&q=85', title: 'Mountain Mist 02' },
+        { src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=900&q=85', title: 'Mountain Mist 03' },
+        { src: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=900&q=85', title: 'Mountain Mist 04' },
+        { src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&q=85', title: 'Mountain Mist 05' },
+        { src: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=900&q=85', title: 'Mountain Mist 06' },
+        { src: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=900&q=85', title: 'Mountain Mist 07' },
+      ]
+    },
+    'high-fashion': {
+      title: 'High Fashion',
+      category: 'Fashion',
+      year: '2024',
+      photos: [
+        { src: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=85', title: 'High Fashion 01' },
+        { src: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=900&q=85', title: 'High Fashion 02' },
+        { src: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=85', title: 'High Fashion 03' },
+        { src: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=900&q=85', title: 'High Fashion 04' },
+        { src: 'https://images.unsplash.com/photo-1496217590455-aa63a8350eea?w=900&q=85', title: 'High Fashion 05' },
+        { src: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&q=85', title: 'High Fashion 06' },
+        { src: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900&q=85', title: 'High Fashion 07' },
+        { src: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=85', title: 'High Fashion 08' },
+        { src: 'https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=900&q=85', title: 'High Fashion 09' },
+        { src: 'https://images.unsplash.com/photo-1519058082700-08a0b56da9b4?w=900&q=85', title: 'High Fashion 10' },
+      ]
+    },
+    'urban-pulse': {
+      title: 'Urban Pulse',
+      category: 'Street',
+      year: '2023',
+      photos: [
+        { src: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=85', title: 'Urban Pulse 01' },
+        { src: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=900&q=85', title: 'Urban Pulse 02' },
+        { src: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=900&q=85', title: 'Urban Pulse 03' },
+        { src: 'https://images.unsplash.com/photo-1444084316824-dc26d6657664?w=900&q=85', title: 'Urban Pulse 04' },
+        { src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=900&q=85', title: 'Urban Pulse 05' },
+        { src: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=85', title: 'Urban Pulse 06' },
+        { src: 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=900&q=85', title: 'Urban Pulse 07' },
+        { src: 'https://images.unsplash.com/photo-1465447142348-e9952c393450?w=900&q=85', title: 'Urban Pulse 08' },
+      ]
+    },
+    'ocean-breath': {
+      title: 'Ocean Breath',
+      category: 'Landscape',
+      year: '2023',
+      photos: [
+        { src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=900&q=85', title: 'Ocean Breath 01' },
+        { src: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=900&q=85', title: 'Ocean Breath 02' },
+        { src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=85', title: 'Ocean Breath 03' },
+        { src: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=900&q=85', title: 'Ocean Breath 04' },
+        { src: 'https://images.unsplash.com/photo-1471922694854-ff1b63b20054?w=900&q=85', title: 'Ocean Breath 05' },
+        { src: 'https://images.unsplash.com/photo-1498550744921-75f79806b8a7?w=900&q=85', title: 'Ocean Breath 06' },
+      ]
+    }
+  };
 
-  // ─── THEME TOGGLE
-  const html = document.documentElement;
-  const toggle = document.getElementById('themeToggle');
-  const saved = localStorage.getItem('theme') || 'dark';
-  html.setAttribute('data-theme', saved);
+  // ═══════════════════════════════════════════════
+  // LIGHTBOX — arrow nav aware
+  // ═══════════════════════════════════════════════
+  let lightboxPhotos = [];
+  let lightboxIndex  = 0;
 
-  toggle.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  });
-
-  // ─── SCROLL REVEAL
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // ─── GALLERY FILTER
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      document.querySelectorAll('.gallery-item').forEach(item => {
-        const show = filter === 'all' || item.dataset.cat === filter;
-        item.classList.toggle('hidden', !show);
-      });
-    });
-  });
-
-  // ─── LIGHTBOX
-  function openLightbox(item) {
-    const img = item.querySelector('img');
-    document.getElementById('lightbox-img').src = img.src;
-    document.getElementById('lightbox-caption').textContent =
-      img.dataset.title + ' — ' + img.dataset.cat;
-    document.getElementById('lightbox').classList.add('open');
+  function openLightboxPhoto(photos, index) {
+    lightboxPhotos = photos;
+    lightboxIndex  = index;
+    const p = photos[index];
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    const cap = document.getElementById('lightbox-caption');
+    img.src = p.src;
+    cap.textContent = p.title + '  ·  ' + (index + 1) + ' / ' + photos.length;
+    lb.classList.add('open');
     document.body.style.overflow = 'hidden';
+    updateLightboxArrows();
+  }
+
+  function updateLightboxArrows() {
+    document.getElementById('lb-prev').style.opacity = lightboxIndex > 0 ? '1' : '0.25';
+    document.getElementById('lb-next').style.opacity = lightboxIndex < lightboxPhotos.length - 1 ? '1' : '0.25';
+  }
+
+  function lightboxNav(dir) {
+    const next = lightboxIndex + dir;
+    if (next < 0 || next >= lightboxPhotos.length) return;
+    lightboxIndex = next;
+    const img = document.getElementById('lightbox-img');
+    const cap = document.getElementById('lightbox-caption');
+    img.style.opacity = '0';
+    img.style.transform = 'scale(0.97)';
+    setTimeout(() => {
+      img.src = lightboxPhotos[lightboxIndex].src;
+      cap.textContent = lightboxPhotos[lightboxIndex].title + '  ·  ' + (lightboxIndex + 1) + ' / ' + lightboxPhotos.length;
+      img.style.opacity = '1';
+      img.style.transform = 'scale(1)';
+    }, 180);
+    updateLightboxArrows();
   }
 
   function closeLightbox() {
@@ -1349,26 +1648,137 @@
   });
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeLightbox();
+    const lb = document.getElementById('lightbox');
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowRight')  lightboxNav(1);
+    if (e.key === 'ArrowLeft')   lightboxNav(-1);
   });
 
-  // ─── NAV ACTIVE SCROLL
+  // ═══════════════════════════════════════════════
+  // CAMPAIGN OPEN / CLOSE
+  // ═══════════════════════════════════════════════
+  function openCampaign(id) {
+    const data = CAMPAIGNS[id];
+    if (!data) return;
+
+    // Update header meta
+    document.getElementById('detail-cat').textContent   = data.category;
+    document.getElementById('detail-title').innerHTML   = data.title.replace(/(\w+)$/, '<em>$1</em>');
+    document.getElementById('detail-year').textContent  = data.year;
+    document.getElementById('detail-count').textContent = data.photos.length + ' photographs';
+
+    // Build masonry photo grid
+    const grid = document.getElementById('campaign-photos');
+    grid.innerHTML = '';
+    data.photos.forEach((photo, i) => {
+      const item = document.createElement('div');
+      item.className = 'campaign-photo-item';
+      item.innerHTML = `
+        <img src="${photo.src}" alt="${photo.title}" loading="lazy">
+        <div class="photo-zoom"><div class="photo-zoom-icon">+</div></div>
+      `;
+      item.addEventListener('click', () => openLightboxPhoto(data.photos, i));
+      grid.appendChild(item);
+    });
+
+    // Switch views with a smooth fade-slide
+    const indexView  = document.getElementById('view-index');
+    const detailView = document.getElementById('view-detail');
+
+    indexView.style.opacity   = '0';
+    indexView.style.transform = 'translateY(-16px)';
+
+    setTimeout(() => {
+      indexView.classList.remove('active');
+      detailView.style.opacity   = '0';
+      detailView.style.transform = 'translateY(20px)';
+      detailView.classList.add('active');
+      requestAnimationFrame(() => {
+        detailView.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+        detailView.style.opacity    = '1';
+        detailView.style.transform  = 'translateY(0)';
+      });
+      // Scroll section into view
+      document.getElementById('work').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 280);
+
+    indexView.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
+  }
+
+  function closeCampaign() {
+    const indexView  = document.getElementById('view-index');
+    const detailView = document.getElementById('view-detail');
+
+    detailView.style.opacity   = '0';
+    detailView.style.transform = 'translateY(-16px)';
+
+    setTimeout(() => {
+      detailView.classList.remove('active');
+      detailView.style.transform = '';
+      indexView.style.opacity    = '0';
+      indexView.style.transform  = 'translateY(20px)';
+      indexView.classList.add('active');
+      requestAnimationFrame(() => {
+        indexView.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+        indexView.style.opacity    = '1';
+        indexView.style.transform  = 'translateY(0)';
+      });
+      document.getElementById('work').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 280);
+
+    detailView.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
+  }
+
+  // ═══════════════════════════════════════════════
+  // LOADER
+  // ═══════════════════════════════════════════════
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('done');
+    }, 1600);
+  });
+
+  // ═══════════════════════════════════════════════
+  // THEME TOGGLE
+  // ═══════════════════════════════════════════════
+  const html   = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const saved  = localStorage.getItem('theme') || 'dark';
+  html.setAttribute('data-theme', saved);
+
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  // ═══════════════════════════════════════════════
+  // SCROLL REVEAL
+  // ═══════════════════════════════════════════════
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ═══════════════════════════════════════════════
+  // NAV ACTIVE STATE ON SCROLL
+  // ═══════════════════════════════════════════════
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
 
   window.addEventListener('scroll', () => {
     let current = '';
-    sections.forEach(section => {
-      const top = section.offsetTop - 100;
-      if (window.scrollY >= top) current = section.id;
-    });
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
     navLinks.forEach(link => {
-      link.style.color = link.getAttribute('href') === '#' + current
-        ? 'var(--accent)' : '';
+      link.style.color = link.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
     });
   });
 
-  // ─── FORM SUBMIT
+  // ═══════════════════════════════════════════════
+  // FORM SUBMIT MOCK
+  // ═══════════════════════════════════════════════
   document.querySelector('.form-submit').addEventListener('click', function() {
     this.textContent = 'Message Sent ✓';
     this.style.background = 'var(--accent)';
